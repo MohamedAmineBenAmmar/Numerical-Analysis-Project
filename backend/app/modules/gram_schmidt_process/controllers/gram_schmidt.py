@@ -25,15 +25,16 @@ class GramSchmidt():
         self.sep = sep
 
 # ---------------- Handling Matrices Q & R --------------------------- 
+    # Cette méthode est responsable de l'extraction des données du fichier que vous avez téléchargé dans le frontend
     def extract_data(self):
         self.data = pd.read_csv(self.filename, header=None, sep=self.sep)
 
-    
+    # Cette méthode configurera la matrice A et le vecteur b.
     def configure_matrices(self):
         self.a = self.data.iloc[:, 0: self.data.shape[1] -1]
         self.b = self.data[self.data.shape[1] -1]
 
-
+    # Cette méthode est responsable de la création de la matrice Q
     def build_q_matrix(self) -> None:
         e = []
         for i in self.a.columns:
@@ -51,7 +52,7 @@ class GramSchmidt():
         self.q = pd.concat(e, axis=1, ignore_index=True)
         
 
-
+    # Cette méthode est responsable de la création de la matrice R
     def build_r_matrix(self) -> None:
         self.r = pd.DataFrame(np.zeros((self.a.shape[1], self.a.shape[1])))
         for i in range(0, self.a.shape[1]):
@@ -63,7 +64,8 @@ class GramSchmidt():
 
 # ------------------------------------------------------------------------------------
 
-# ---------------- Solving the System --------------------------- 
+# ---------------- Solving the System ---------------------------
+    # Cette méthode est chargée de résoudre le système et de générer le vecteur X
     def solve_system(self) -> Series:
         # Calculate the transpose of the matrix Q
         qt = self.q.T
@@ -89,6 +91,8 @@ class GramSchmidt():
 
 
     # ------------------
+    # Cette méthode est chargée d'arrondir toutes les valeurs qui résident dans 
+    # les matrices A, Q, R, les vecteurs X et b à 3 nombres après la virgule
     def round_all_values(self):
         self.q = self.q.round(3)
         self.r = self.r.round(3)

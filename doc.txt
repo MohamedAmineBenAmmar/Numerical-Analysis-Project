@@ -1,0 +1,58 @@
+L'application web est divisée en composants majeurs le frontend dans lequel vous trouverez tout le code lié à la partie visuelle de l'application. 
+Dans le dossier principal, vous trouverez la logique derrière la décomposition QR Gram Schmidit. 
+Nous avons utilisé FastAPI pour créer un service Web que nous avons consommé dans notre application frontale.
+Lorsque vous ouvrez le dossier principal, vous trouverez tous les fichiers encapsulés dans le dossier de l'application. 
+Le code lié à la méthode mathématique que nous avons manipulé réside dans
+le dossier suivant :
+backend/app/modules/gram_schmidt_process/controllers
+
+Le fichier le plus intéressant est le gram_schmidt.py qui contient la classe GramSchmidt qui encapsule toute la logique liée à la procédure Gram Schmidt.
+
+Dans cette classe on trouve les methodes suivantes:
+- extract_data: Cette méthode est responsable de l'extraction des données du fichier que vous avez téléchargé dans le frontend.
+- configure_matrices: Cette méthode configurera la matrice A et le vecteur b.
+- build_q_matrix: Cette méthode est responsable de la création de la matrice Q.
+- build_r_matrix: Cette méthode est responsable de la création de la matrice R.
+- solve_system: Cette méthode est chargée de résoudre le système et de générer le vecteur X
+- round_all_values: Cette méthode est chargée d'arrondir toutes les valeurs qui résident dans les matrices A, Q, R, les vecteurs X et b à 3 nombres après la virgule.
+- calculate_determinant: Cette méthode calcule le déterminant de la matrice A.
+- calculate_condition_number: Cette méthode nous permet de calculer le conditionnement de la matrice A en fonction de l'argument 
+                              qui lui est passé, il peut s'agir d'une chaîne contenant le mot-clé "INF" ou d'un entier pouvant varier entre 1 et 2.
+
+
+
+Le deuxième fichier est gram_schmidt_process_controller.py qui contient la classe Gram Schmidt Process Controller qui encapsule une méthode statique qui est run_gram_schmidt_process.
+qui est la méthode de base dans notre application.
+- run_gram_schmidt_process: cette méthode nous permet de communiquer avec d'autres classes pour effectuer les tâches nécessaires.
+cette méthode contient également toutes les validations comme
+	1- vérifier si la matrice A est une matrice carrée
+
+	2- Vérifier si le déterministe de A n'est pas 0
+
+De plus, cette méthode calcule les différents temps d'exécution des différentes parties de notre code et renvoie la sortie à notre interface qui est la partie visuelle de l'application que vous voyez.
+
+
+Le troisième et dernier fichier à vérifier est math_utils.py qui réside dans
+backend/application/utilitaires. Ce fichier contient la classe Math qui contient toutes 
+les méthodes mathématiques telles que le calcul du produit scalaire, le calcul de la norme d'un vecteur, la multiplication de matrices .....
+
+Dans cette classe on trouve:
+- scalar_product: qui permet de calculer le produit scalaire entre deux vecteurs.
+- mult_vect_by: multiplier un vecteur par un scalaire.
+- matrix_multiplication: Cette méthode effectue la multiplication des matrices en respectant les conditions aussi elle déclenche une erreur si la condition n'est pas respectée.
+- norm: calcule la norme d'un vecteur.
+
+
+
+
+Remarques:
+1- L'extension de fichier que vous allez télécharger doit être csv ou txt et vous devez spécifier le séparateur utilisé dans le fichier.
+2- Le fichier doit respecter le format tel que décrit :
+   matrice A colonnes dans la partie gauche et dans la partie droite (dernière colonne) il faut trouver le b
+3- Si vous trouvez que le temps d'exécution d'une certaine portion de notre code est égal à 0 par exemple (calcul du déterminant de la matrice A) cela prouve que notre application fonctionne bien 
+   et que le temps que le processeur a utilisé pour calculer cette valeur est négligeable.
+
+
+
+
+

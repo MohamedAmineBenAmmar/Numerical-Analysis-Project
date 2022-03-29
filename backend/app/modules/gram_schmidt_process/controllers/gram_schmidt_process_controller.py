@@ -44,6 +44,19 @@ class GramSchmidtProcessController():
 
         determinant_calculation_time = time.time() - start
 
+        # Compute the condition number of a matrix A.
+        start = time.time()
+        condition_number_1 = gram_schmidt.calculate_condition_number(1)
+        condition_number_1_calculation_time = time.time() - start
+
+        start = time.time()
+        condition_number_2 = gram_schmidt.calculate_condition_number(2)
+        condition_number_2_calculation_time = time.time() - start
+
+        start = time.time()
+        condition_number_inf = gram_schmidt.calculate_condition_number('INF')
+        condition_number_inf_calculation_time = time.time() - start
+
         # Calculate the Q matrix
         start = time.time()
         gram_schmidt.build_q_matrix()
@@ -102,13 +115,20 @@ class GramSchmidtProcessController():
                 "elements": gram_schmidt.r.values.tolist()
             },
             "calculation_time": {
-                "labels": ["data_extraction_time", "a_b_extraction_time", "determinant_calculation_time", "q_calculation_time",
+                "labels": ["data_extraction_time", "a_b_extraction_time", "determinant_calculation_time", "cond1_calculation_time",
+                           "cond2_calculation_time", "cond_inf_calculation_time", "q_calculation_time",
                            "r_calculation_time", "system_resolution_time", "round_calculation_time"],
 
-                "data": [data_extraction_time, a_b_extraction_time, determinant_calculation_time, q_calculation_time,
+                "data": [data_extraction_time, a_b_extraction_time, determinant_calculation_time, condition_number_1_calculation_time,
+                         condition_number_2_calculation_time, condition_number_inf_calculation_time, q_calculation_time,
                          r_calculation_time, system_resolution_time, round_calculation_time],
 
                 "global": global_end - global_start
+            },
+            "condition_number":{
+                "condition_number_1": condition_number_1,
+                "condition_number_2": condition_number_2,
+                "condition_number_inf": condition_number_inf
             }
 
         }

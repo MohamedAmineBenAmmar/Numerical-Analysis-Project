@@ -26,7 +26,7 @@ const Navbar = () => {
   );
   const end = (
     <>
-      <a href="https://github.com/MohamedAmineBenAmmar?tab=repositories" target="_blank">
+      <a href="https://github.com/MohamedAmineBenAmmar/Numerical-Analysis-Project" target="_blank">
         <i className="pi pi-github mr-5" style={{ fontSize: "1.5em" }}></i>
       </a>
     </>

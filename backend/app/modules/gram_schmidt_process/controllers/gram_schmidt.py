@@ -104,6 +104,17 @@ class GramSchmidt():
         det = np.linalg.det(matrix_a_np_array)
 
         return int(det)
+
+    def calculate_condition_number(self, option: any) -> float:
+        matrix_a_np_array = self.a.to_numpy()
+
+        if type(option) == str:
+            if option == 'INF':
+                return np.linalg.cond(matrix_a_np_array, np.inf)
+        elif type(option) == int:
+           return np.linalg.cond(matrix_a_np_array, option)  
+        else:
+            raise Exception("Unsupported condition number option")
         
         
         

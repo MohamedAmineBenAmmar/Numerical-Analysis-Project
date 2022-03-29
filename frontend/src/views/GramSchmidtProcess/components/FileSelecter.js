@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { gramSchmidtProcess } from "../../../redux/dataManagerSlice";
 
 import Message from "../../../components/Message";
-import { clearError } from "../../../redux/errorSlice";
+import { clearError, setError } from "../../../redux/errorSlice";
 import { clearSuccess } from "../../../redux/successSlice";
 
 const FileSelecter = () => {
@@ -32,16 +32,51 @@ const FileSelecter = () => {
     // console.log(e.files);
 
     // Clear previous error and success
-    dispatch(clearError())
-    dispatch(clearSuccess())
+    dispatch(clearError());
+    dispatch(clearSuccess());
 
- 
-
-    let formData = new FormData();
-    formData.append("file", e.files[0]);
-    formData.append("sep", selectedSeparator.code);
-
-    dispatch(gramSchmidtProcess(formData));
+    // UI Validations
+    if (e.files.length > 1) {
+      dispatch(
+        setError({
+          id: "UI_FILE_SELECTION_VALIDATION",
+          msg: "You are allowed to upload only one file.",
+          status: "Error",
+        })
+      );
+    } else {
+      // Extract file extension
+      let file_extension = e.files[0]["name"].substr(
+        e.files[0]["name"].lastIndexOf(".") + 1,
+        e.files[0]["name"].length
+      );
+      if (["csv", "txt"].indexOf(file_extension) === -1) {
+        dispatch(
+          setError({
+            id: "UI_FILE_SELECTION_VALIDATION",
+            msg: "File extension not supported, only txt and csv extension are allowed.",
+            status: "Error",
+          })
+        );
+      } else {
+        // The user must select a separator
+        if (selectedSeparator == null) {
+          dispatch(
+            setError({
+              id: "UI_FILE_SELECTION_VALIDATION",
+              msg: "You must select a separator.",
+              status: "Error",
+            })
+          );
+        } else {
+          // Everything is good to go
+          let formData = new FormData();
+          formData.append("file", e.files[0]);
+          formData.append("sep", selectedSeparator.code);
+          dispatch(gramSchmidtProcess(formData));
+        }
+      }
+    }
   };
 
   return (
@@ -52,9 +87,7 @@ const FileSelecter = () => {
           name="input_file"
           customUpload
           uploadHandler={myUploader}
-          emptyTemplate={
-            <p className="m-0">Drag and drop files to here to upload.</p>
-          }
+          emptyTemplate={<p className="m-0">Select file to upload.</p>}
         />
 
         <div className="dropdown-wrapper">
@@ -69,12 +102,13 @@ const FileSelecter = () => {
         </div>
       </div>
       <div className="col-6 col-offset-3">
-        {error.id === "DETERMINANT_CALCULATION_ERROR" && (
+        {(error.id === "DETERMINANT_CALCULATION_ERROR" ||
+          error.id === "UI_FILE_SELECTION_VALIDATION") && (
           <Message
             severity="error"
             summary=""
             detail={error.msg}
-            sticky={true}       
+            sticky={true}
           />
         )}
       </div>
